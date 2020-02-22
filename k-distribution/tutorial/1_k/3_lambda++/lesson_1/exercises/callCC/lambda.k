@@ -7,9 +7,8 @@ module LAMBDA-SEMANTICS
   imports SUBSTITUTION
   imports syntax DEFAULT-CONFIGURATION
 
-  syntax Fun ::= "lambda" KVar "." Exp  [binder, latex(\lambda{#1}.{#2})]
   syntax Val ::= KVar
-               | Fun
+               | "lambda" KVar "." Exp  [binder, latex(\lambda{#1}.{#2})]
   syntax Exp ::= Val
                | Exp Exp              [strict, left]
                | "(" Exp ")"          [bracket]
@@ -42,8 +41,7 @@ module LAMBDA-SEMANTICS
   syntax Exp ::= "callcc" Exp  [strict]
   syntax Val ::= cc(K)
   rule <k> (callcc V:Val => V cc(K)) ~> K </k>
-  rule <k> cc(K) V:Fun ~> _ =>  V ~> K </k>
-  rule <k> cc(K) V:KVar ~> _ =>  V </k>
+  rule <k> cc(K) V ~> _ =>  V ~> K </k>
 endmodule
 
 module LAMBDA

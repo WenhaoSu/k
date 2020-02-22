@@ -12,14 +12,15 @@ module IMP-SYNTAX
                  | "!" BExp                   [strict]
                  > BExp "&&" BExp             [left, strict(1)]
                  | "(" BExp ")"               [bracket]
-  syntax Block ::= "{" "}"
+  syntax Endpgm ::= "{" "}"
+  syntax Block ::= Endpgm
                  | "{" Stmt "}"
   syntax Stmt  ::= Block
                  | Id "=" AExp ";"            [strict(2)]
                  | "if" "(" BExp ")"
                    Block "else" Block         [strict(1)]
                  | "while" "(" BExp ")" Block
-                 > Stmt Stmt                  [left]
+                 > Stmt Stmt                  [left, strict(1)]
   syntax Pgm ::= "int" Ids ";" Stmt
   syntax Ids ::= List{Id,","}
 endmodule
@@ -28,7 +29,7 @@ endmodule
 module IMP
   imports IMP-SYNTAX
   imports DOMAINS
-  syntax KResult ::= Int | Bool
+  syntax KResult ::= Int | Bool | Endpgm
 
   configuration <T color="yellow">
                   <k color="green"> $PGM:Pgm </k>
@@ -46,11 +47,12 @@ module IMP
   rule true && B => B
   rule false && _ => false
 // Block
-  rule {} => .   [structural]
+  // rule {} => .   [structural]
   rule {S} => S  [structural]
 // Stmt
-  rule <k> X = I:Int; => . ...</k> <state>... X |-> (_ => I) ...</state>
-  rule S1:Stmt S2:Stmt => S1 ~> S2  [structural]
+  rule <k> X = I:Int; => {} ...</k> <state>... X |-> (_ => I) ...</state>
+  rule <k> {} S:Stmt => S ...</k>
+  // rule S1:Stmt S2:Stmt => S1 ~> S2  [structural]
   rule if (true)  S else _ => S
   rule if (false) _ else S => S
   rule while (B) S => if (B) {S while (B) S} else {}  [structural]

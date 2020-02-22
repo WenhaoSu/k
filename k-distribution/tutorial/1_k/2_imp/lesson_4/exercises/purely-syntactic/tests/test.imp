@@ -1,8 +1,0 @@
-// This program tests the Collatz conjecture for all numbers up to m
-// and accumulates the total number of steps in s.
-
-int m, n, q, r, s;
-m = 10;
-if (m <= 11) { } else {}
-
-// s should be 66 when m is 10

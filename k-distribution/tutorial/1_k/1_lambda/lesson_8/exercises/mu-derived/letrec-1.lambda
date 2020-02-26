@@ -1,2 +1,3 @@
-letrec f x = if x <= 1 then 1 else (x * (f (x + -1)))
+// Fibonacci number
+letrec f x = if x <= 1 then x else ((f (x + -1)) + (f (x + -2)))
 in (f 10)

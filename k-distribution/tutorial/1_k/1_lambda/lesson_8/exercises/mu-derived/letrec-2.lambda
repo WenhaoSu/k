@@ -1,2 +1,5 @@
-letrec f x = if x <= 1 then 1 else (x * (f (x + -1)))
-in (f 10)
+// Collatz conjecture
+letrec f x = if x <= 1 then true else (
+    if x <= ((x / 2) * 2) then (f (x / 2)) else (f (3 * x + 1))
+)
+in (f 1747282)

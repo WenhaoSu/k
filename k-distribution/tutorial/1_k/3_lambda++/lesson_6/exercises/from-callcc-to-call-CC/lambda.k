@@ -175,11 +175,11 @@ supposed to be executed.  Forget the environment and you get a wrong
   syntax Id ::= "$x" [token]
   syntax Val ::= cc(Map,K)
     [latex(\textsf{closure}_{\texttt{callcc}}({#1},{#2}))]
-  syntax Val ::= ee(Map,K)
-    [latex(\textsf{closure}_{\texttt{ee}}({#1},{#2}))]
+  syntax Val ::= ee()
+    [latex(\textsf{closure}_{\texttt{ee}}())]
   
   rule <k> (callcc V:Val => V cc(Rho,K)) ~> K </k> <env> Rho </env>
   rule <k> cc(Rho,K) V:Val ~> _ =>  V ~> K </k> <env> _ => Rho </env>
-  rule <k> (callCC V:Val ~> K) => (callcc (lambda $x . (V $x ee(Rho,K))) ~> K) </k> <env> Rho </env>
-  rule <k> V ee(Rho,K) ~> _ => V </k>
+  rule <k> (callCC V:Val ~> K) => (callcc (lambda $x . (V $x ee())) ~> K) </k> <env> Rho </env>
+  rule <k> V ee() ~> _ => V </k>
 endmodule

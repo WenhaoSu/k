@@ -43,9 +43,9 @@ module LAMBDA-SEMANTICS
   syntax KVar ::= "$x" [token]
   syntax Val ::= cc(K) | dd(K)
   rule <k> (callCC V:Val ~> K) => V cc(K) </k>
-  rule <k> V dd(K) => V ~> K </k>
   rule <k> cc(K) V ~> _ => V ~> K </k>
   rule <k> (callcc V:Val ~> K) => (callCC (lambda $x . (V $x dd(K))) ~> K) </k>
+  rule <k> V dd(K) => V ~> K </k>
 endmodule
 
 module LAMBDA

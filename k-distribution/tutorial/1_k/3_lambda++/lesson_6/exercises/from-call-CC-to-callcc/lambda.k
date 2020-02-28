@@ -172,11 +172,15 @@ wraps both the remaining computation and the environment in which it is
 supposed to be executed.  Forget the environment and you get a wrong
 \texttt{callcc}. */
 
+  syntax Id ::= "$x" [token]
   syntax Val ::= cc(Map,K)
     [latex(\textsf{closure}_{\texttt{callcc}}({#1},{#2}))]
-  syntax Val ::= CC(Map,K)
-    [latex(\textsf{closure}_{\texttt{callCC}}({#1},{#2}))]
-  rule <k> (callCC V:Val ~> K) => V CC(Rho,K) </k> <env> Rho </env>
-  rule <k> CC(Rho,K) V:Val ~> _ =>  V ~> K </k> <env> _ => Rho </env>
-  rule <k> (callcc V:Val ~> K) => V CC(Rho,K) ~> K </k> <env> Rho </env>
+  syntax Val ::= dd(Map,K)
+    [latex(\textsf{closure}_{\texttt{dd}}({#1},{#2}))]
+
+  rule <k> (callCC V:Val ~> K) => V cc(Rho,K) </k> <env> Rho </env>
+  rule <k> cc(Rho,K) V:Val ~> _ =>  V ~> K </k> <env> _ => Rho </env>
+
+  rule <k> (callcc V:Val ~> K) => (callCC (lambda $x . (V $x dd(Rho,K))) ~> K) </k> <env> Rho </env>
+  rule <k> V dd(Rho,K) => V ~> K </k> <env> _ => Rho </env>
 endmodule
